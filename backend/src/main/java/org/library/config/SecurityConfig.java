@@ -56,7 +56,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll() // Open registration
+                        .requestMatchers(
+                                "/auth/login",
+                                "/auth/register",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/scalar",
+                                "/scalar/**"
+                        ).permitAll() // Open registration
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
