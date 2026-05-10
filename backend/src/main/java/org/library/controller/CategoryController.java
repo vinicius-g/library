@@ -7,6 +7,7 @@ import org.library.service.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,11 +20,13 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CreateCategoryDTO dto) {
         return ResponseEntity.ok(categoryService.create(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@RequestBody UpdateCategoryDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(categoryService.update(dto, id));

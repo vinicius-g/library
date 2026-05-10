@@ -7,6 +7,7 @@ import org.library.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,11 +21,13 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<BookDTO> create(@RequestBody CreateBookDTO dto) {
         return ResponseEntity.ok(bookService.create(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> update(@RequestBody UpdateBookDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(bookService.update(dto, id));

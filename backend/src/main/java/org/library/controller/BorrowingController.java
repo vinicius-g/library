@@ -7,6 +7,7 @@ import org.library.service.BorrowingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,11 +20,13 @@ public class BorrowingController {
         this.borrowingService = borrowingService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<BorrowingDTO> borrowBook(@RequestBody CreateBorrowingDTO dto) {
         return ResponseEntity.ok(borrowingService.borrow(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/return/{borrowingId}")
     public ResponseEntity<Void> returnBook(@PathVariable Long borrowingId) {
         borrowingService.returnBorrow(borrowingId);
