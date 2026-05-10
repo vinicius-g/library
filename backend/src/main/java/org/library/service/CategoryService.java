@@ -4,8 +4,12 @@ import org.library.dto.CategoryDTO;
 import org.library.dto.create.CreateCategoryDTO;
 import org.library.dto.update.UpdateCategoryDTO;
 import org.library.entity.Category;
+import org.library.mapper.CategoryMapper;
 import org.library.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -29,5 +33,9 @@ public class CategoryService {
         categoryRepository.save(category);
 
         return new CategoryDTO(category.getId(), category.getName());
+    }
+
+    public Set<Category> findAllByIdIn(Set<Long> ids) {
+        return categoryRepository.findAllByIdIn(ids);
     }
 }

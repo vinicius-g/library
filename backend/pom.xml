@@ -169,8 +169,8 @@
 
         <dependency>
             <groupId>com.scalar.maven</groupId>
-            <artifactId>scalar-webmvc</artifactId>
-            <version>0.6.34</version>
+            <artifactId>scalar</artifactId>
+            <version>0.4.3</version>
         </dependency>
     </dependencies>
 
