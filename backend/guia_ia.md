@@ -1,4 +1,5 @@
-1 - Sugestão de modelagem de dados para
+1 - Sugestão de modelagem de dados
+IA: Gemini 3.1 PRO
 
 Prompt:
 
@@ -76,3 +77,48 @@ status: ENUM (ATIVO, DEVOLVIDO, ATRASADO)
 Nesse caso, por exemplo, optamos por não utilizar um UUID como chave primária para as tabelas, visto que um número sequencial (inteiro) seria mais simples e eficiente para o contexto de um sistema de biblioteca comunitária, onde a escalabilidade não é uma preocupação imediata.
 Além disso, o campo status da tabela de emprestimos poderia ser calculado dinamicamente com base nas datas de empréstimo e devolução, eliminando a necessidade de armazenar esse campo no banco de dados e o trabalho desnecessário de sempre manter esse estado atualizado.
 Por fim, optamos também por criar uma tabela a parte para categorias, pois por serem entidades semanticamente diferentes, é melhor que estejam desacopladas nas regras de negócio.
+
+2 - Dockerização do Projeto
+IA: Gemini 3.1 PRO
+
+Prompt:
+
+"
+Gere um yml de docker-compose para a meu backend em Java 21 com Postgres
+"
+
+A IA gerou o seguinte docker-compose.yml:
+
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: library_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: dlibrary
+      POSTGRES_USER: dlibrary
+      POSTGRES_PASSWORD: dlibrary
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      context: ./backend # Aponta para a pasta onde está o Dockerfile do Java
+    container_name: library_backend
+    ports:
+      - "8080:8080" # Expõe a porta 8080 para a sua máquina
+    depends_on:
+      - db # Garante que o back-end só inicie depois do banco de dados
+    environment:
+      # Sobrescreve as configurações do seu application.yml
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dlibrary
+      - SPRING_DATASOURCE_USERNAME=dlibrary
+      - SPRING_DATASOURCE_PASSWORD=dlibrary
+
+volumes:
+  postgres_data:
+```
+Apenas tivemos que nos atentar às credenciais do banco de dados e mudar a porta a ser exposta.
