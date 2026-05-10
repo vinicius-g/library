@@ -4,6 +4,8 @@ import org.library.dto.BookDTO;
 import org.library.dto.create.CreateBookDTO;
 import org.library.dto.update.UpdateBookDTO;
 import org.library.service.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +28,10 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> update(@RequestBody UpdateBookDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(bookService.update(dto, id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<BookDTO>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(bookService.findAll(pageable));
     }
 }

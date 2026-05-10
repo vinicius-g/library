@@ -7,6 +7,8 @@ import org.library.entity.Book;
 import org.library.entity.Category;
 import org.library.mapper.BookMapper;
 import org.library.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,7 +27,6 @@ public class BookService {
         this.bookRepository = bookRepository;
         this.categoryService = categoryService;
     }
-
 
     public BookDTO create(CreateBookDTO dto) {
         Set<Category> categories = categoryService.findAllByIdIn(dto.categoriesIds());
@@ -80,5 +81,9 @@ public class BookService {
         }
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         bookRepository.save(book);
+    }
+
+    public Page<BookDTO> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).map(BookMapper::toDto);
     }
 }

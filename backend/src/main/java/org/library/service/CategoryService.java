@@ -6,6 +6,8 @@ import org.library.dto.update.UpdateCategoryDTO;
 import org.library.entity.Category;
 import org.library.mapper.CategoryMapper;
 import org.library.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -37,5 +39,9 @@ public class CategoryService {
 
     public Set<Category> findAllByIdIn(Set<Long> ids) {
         return categoryRepository.findAllByIdIn(ids);
+    }
+
+    public Page<CategoryDTO> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable).map(CategoryMapper::toDto);
     }
 }

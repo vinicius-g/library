@@ -4,6 +4,8 @@ import org.library.dto.CategoryDTO;
 import org.library.dto.create.CreateCategoryDTO;
 import org.library.dto.update.UpdateCategoryDTO;
 import org.library.service.CategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,11 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@RequestBody UpdateCategoryDTO dto, @PathVariable Long id) {
         return ResponseEntity.ok(categoryService.update(dto, id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<CategoryDTO>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findAll(pageable));
     }
 
 }
