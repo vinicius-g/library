@@ -1,0 +1,17 @@
+:host ::ng-deep .white-text {
+  color: white !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+:host ::ng-deep .gray-hover:hover {
+  background-color: rgb(55, 65, 81) !important;
+}
+
+:host ::ng-deep .white-icon {
+  color: white !important;
+}
+
+:host ::ng-deep .white-label{
+  color: white !important;
+}

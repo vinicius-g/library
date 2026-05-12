@@ -10,7 +10,9 @@ public class BookMapper {
                 entity.getTitle(),
                 entity.getAuthor(),
                 entity.getIsbn(),
-                CategoryMapper.toDtoSet(entity.getCategories())
+                CategoryMapper.toDtoSet(entity.getCategories()),
+                entity.getCopies(),
+                entity.getAvailableCopies()
         );
     }
 }

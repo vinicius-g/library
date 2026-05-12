@@ -1,0 +1,140 @@
+<div class="min-h-screen bg-gray-100">
+
+  <header class="bg-gray-800 px-8 h-16 flex items-center justify-between sticky top-0 z-10 shadow-lg">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">📚</span>
+      <h1 class="text-lg font-bold text-white">Biblioteca Comunitária</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center" *ngIf="isAdmin">
+        <p-button
+          label="Devolver"
+          icon="pi pi-upload"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+        <p-button
+          label="Emprestar"
+          icon="pi pi-book"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+          (onClick)="goToBorrowBook()"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+        <p-button
+          label="Adicionar Livro"
+          icon="pi pi-plus"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+          (onClick)="goToAddBook()"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+      </div>
+      <p-button
+        label="Sair"
+        icon="pi pi-sign-out"
+        [text]="true"
+        severity="secondary"
+        styleClass="white-label gray-hover"
+        (onClick)="logout()"
+      />
+    </div>
+  </header>
+
+  <main class="p-8">
+
+    <div class="flex items-center gap-2 mb-6">
+      <p-button
+        icon="pi pi-arrow-left"
+        [text]="true"
+        label="Voltar"
+        severity="secondary"
+        (onClick)="goBack()"
+      />
+      <span class="text-gray-300">/</span>
+      <h2 class="text-xl font-bold text-gray-800">Devolver Livro</h2>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <p-card>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Usuário</label>
+            <p-select
+              formControlName="userId"
+              [options]="users"
+              optionLabel="username"
+              optionValue="id"
+              placeholder="Selecione um usuário"
+              (onChange)="onUserChange($event)"
+              styleClass="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Livro Emprestado</label>
+            <p-select
+              formControlName="borrowingId"
+              [options]="borrowings"
+              optionLabel="bookDTO.title"
+              optionValue="id"
+              [disabled]="!selectedUserId || borrowings.length === 0"
+              placeholder="{{ borrowings.length === 0 ? 'Nenhum empréstimo ativo' : 'Selecione um livro' }}"
+              styleClass="w-full"
+            >
+              <ng-template let-borrowing pTemplate="item">
+                {{ borrowing.bookDTO.title }} - {{ borrowing.bookDTO.author }}
+              </ng-template>
+              <ng-template let-borrowing pTemplate="selectedItem">
+                {{ borrowing.bookDTO.title }} - {{ borrowing.bookDTO.author }}
+              </ng-template>
+            </p-select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Data de Devolução</label>
+            <p-datepicker
+              formControlName="returnedAt"
+              dateFormat="dd/mm/yy"
+              placeholder="Selecione a data"
+              styleClass="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Estado do Livro</label>
+            <p-select
+              formControlName="bookCondition"
+              [options]="bookConditions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecione o estado"
+              styleClass="w-full"
+            />
+          </div>
+
+          <div class="flex gap-3 justify-end">
+            <p-button
+              label="Cancelar"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="goBack()"
+            />
+            <p-button
+              label="Devolver"
+              type="submit"
+              [disabled]="form.invalid"
+              [raised]="true"
+            />
+          </div>
+        </form>
+      </p-card>
+    </div>
+
+  </main>
+
+</div>

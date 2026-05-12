@@ -2,6 +2,7 @@ package org.library.service;
 
 import org.library.dto.BorrowingDTO;
 import org.library.dto.create.CreateBorrowingDTO;
+import org.library.dto.create.ReturnBorrowingDTO;
 import org.library.entity.Borrowing;
 import org.library.mapper.BorrowingMapper;
 import org.library.repository.BorrowingRepository;
@@ -15,11 +16,8 @@ import java.time.LocalDateTime;
 public class BorrowingService {
 
     private final BorrowingRepository borrowingRepository;
-
     private final BookService bookService;
-
     private final UserService userService;
-
 
     public BorrowingService(
             BorrowingRepository borrowingRepository,
@@ -44,18 +42,29 @@ public class BorrowingService {
         return BorrowingMapper.toDto(borrowingRepository.save(borrowing));
     }
 
-    public void returnBorrow(Long borrowingId) {
-        var borrowing = borrowingRepository.findById(borrowingId).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+    public void returnBorrow(ReturnBorrowingDTO dto) {
+        var borrowing = borrowingRepository.findById(dto.borrowingId())
+                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
         if (borrowing.getReturnedAt() != null) {
             throw new RuntimeException("Empréstimo já foi devolvido");
         }
-        borrowing.setReturnedAt(LocalDateTime.now());
-        bookService.returnBook(borrowing.getBook());
+        borrowing.setReturnedAt(dto.returnedAt());
+        borrowing.setBookCondition(dto.bookCondition());
+        
+        // Só incrementa availableCopies se NÃO for DANIFICADO
+        if (!"DANIFICADO".equalsIgnoreCase(dto.bookCondition())) {
+            bookService.returnBook(borrowing.getBook());
+        }
+        
         borrowingRepository.save(borrowing);
     }
 
     public Page<BorrowingDTO> getBorrowingsByUserId(Long userId, Pageable pageable) {
         return borrowingRepository.findByUserId(userId, pageable).map(BorrowingMapper::toDto);
+    }
+
+    public Page<BorrowingDTO> getActiveBorrowingsByUserId(Long userId, Pageable pageable) {
+        return borrowingRepository.findByUserIdAndReturnedAtIsNull(userId, pageable).map(BorrowingMapper::toDto);
     }
 
 }

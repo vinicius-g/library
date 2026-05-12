@@ -1,0 +1,38 @@
+<div class="bg-white rounded-xl overflow-hidden shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col">
+  <div class="bg-gradient-to-br from-gray-700 to-gray-900 h-48 flex items-center justify-center overflow-hidden relative">
+    <!-- Loading spinner -->
+    <div *ngIf="imageLoading && coverUrl" class="absolute inset-0 flex items-center justify-center bg-gray-800">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+    </div>
+    
+    <!-- Imagem da capa -->
+    <img 
+      *ngIf="coverUrl && !imageError" 
+      [src]="coverUrl" 
+      [alt]="book.title"
+      (load)="onImageLoad()"
+      (error)="onImageError()"
+      [class.hidden]="imageLoading"
+      class="w-full h-full object-cover"
+    />
+    
+    <!-- Ícone fallback -->
+    <span *ngIf="(!coverUrl || imageError) && !imageLoading" class="text-5xl">📖</span>
+  </div>
+  <div class="p-4 flex flex-col gap-1.5 flex-1">
+    <h3 class="text-sm font-bold text-gray-800 leading-snug">{{ book.title }}</h3>
+    <p class="text-xs text-gray-500">{{ book.author }}</p>
+    <p class="text-xs text-gray-400">ISBN: {{ book.isbn }}</p>
+    <div class="flex flex-wrap gap-1 mt-1">
+      <span *ngFor="let cat of book.categories" class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
+        {{ cat.name }}
+      </span>
+    </div>
+    <span
+      class="text-xs font-semibold mt-1"
+      [ngClass]="book.availableCopies > 0 ? 'text-green-600' : 'text-red-600'"
+    >
+      {{ book.availableCopies > 0 ? 'Disponível (' + book.availableCopies + ')' : 'Indisponível' }}
+    </span>
+  </div>
+</div>

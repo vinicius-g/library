@@ -1,0 +1,127 @@
+<div class="min-h-screen bg-gray-100">
+
+  <header class="bg-gray-800 px-8 h-16 flex items-center justify-between sticky top-0 z-10 shadow-lg">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">📚</span>
+      <h1 class="text-lg font-bold text-white">Biblioteca Comunitária</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center" *ngIf="isAdmin">
+        <p-button
+          label="Devolver"
+          icon="pi pi-upload"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+          (onClick)="goToReturnBook()"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+        <p-button
+          label="Emprestar"
+          icon="pi pi-book"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+          (onClick)="goToBorrowBook()"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+        <p-button
+          label="Adicionar Livro"
+          icon="pi pi-plus"
+          [text]="true"
+          severity="secondary"
+          styleClass="white-label gray-hover"
+        />
+        <div class="h-8 w-px bg-gray-600"></div>
+      </div>
+      <p-button
+        label="Sair"
+        icon="pi pi-sign-out"
+        [text]="true"
+        severity="secondary"
+        styleClass="white-label gray-hover"
+        (onClick)="logout()"
+      />
+    </div>
+  </header>
+
+  <main class="p-8">
+
+    <div class="flex items-center gap-2 mb-6">
+      <p-button
+        icon="pi pi-arrow-left"
+        [text]="true"
+        label="Voltar"
+        severity="secondary"
+        (onClick)="onCancel()"
+      />
+      <span class="text-gray-300">/</span>
+      <h2 class="text-xl font-bold text-gray-800">Adicionar Livro</h2>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <p-card>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Título</label>
+            <input pInputText formControlName="title" placeholder="Ex: Dom Casmurro" class="w-full" />
+            <small *ngIf="isInvalid('title')" class="text-red-500">Título é obrigatório.</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Autor</label>
+            <input pInputText formControlName="author" placeholder="Ex: Machado de Assis" class="w-full" />
+            <small *ngIf="isInvalid('author')" class="text-red-500">Autor é obrigatório.</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">ISBN</label>
+            <input pInputText formControlName="isbn" placeholder="Ex: 978-85-359-0277-8" class="w-full" />
+            <small *ngIf="isInvalid('isbn')" class="text-red-500">ISBN é obrigatório.</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Número de Cópias</label>
+            <p-inputNumber formControlName="copies" [min]="1" [showButtons]="true" class="w-full" />
+            <small *ngIf="isInvalid('copies')" class="text-red-500">Informe ao menos 1 cópia.</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-semibold">Categorias</label>
+            <div *ngIf="categories.length === 0" class="text-sm text-gray-400">Nenhuma categoria disponível.</div>
+            <div class="grid grid-cols-2 gap-3">
+              <div *ngFor="let cat of categories" class="flex items-center gap-2">
+                <p-checkbox
+                  [value]="cat.id"
+                  (onChange)="onCategoryChange(cat.id, $event.checked)"
+                  [binary]="true"
+                  [inputId]="'cat-' + cat.id"
+                />
+                <label [for]="'cat-' + cat.id" class="cursor-pointer">{{ cat.name }}</label>
+              </div>
+            </div>
+            <small *ngIf="isInvalid('categoriesIds')" class="text-red-500">Selecione ao menos uma categoria.</small>
+          </div>
+
+          <div class="flex gap-3 justify-end">
+            <p-button
+              label="Cancelar"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="onCancel()"
+            />
+            <p-button
+              label="Salvar"
+              type="submit"
+              [raised]="true"
+            />
+          </div>
+
+        </form>
+      </p-card>
+    </div>
+
+  </main>
+
+</div>

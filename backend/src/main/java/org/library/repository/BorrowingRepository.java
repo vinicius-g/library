@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     Page<Borrowing> findByUserId(Long userId, Pageable pageable);
+    Page<Borrowing> findByUserIdAndReturnedAtIsNull(Long userId, Pageable pageable);
 }

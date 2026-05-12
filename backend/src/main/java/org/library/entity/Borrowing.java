@@ -45,4 +45,7 @@ public class Borrowing {
     @Column(name = "returned_at")
     private LocalDateTime returnedAt;
 
+    @Column(name = "book_condition")
+    private String bookCondition;
+
 }

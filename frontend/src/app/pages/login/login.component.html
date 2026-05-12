@@ -1,0 +1,69 @@
+<div class="min-h-screen flex flex-col bg-gradient-to-br from-gray-500 via-gray-600 to-gray-700">
+  
+  <header class="bg-gray-800 px-8 h-16 flex items-center shadow-lg">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">📚</span>
+      <h1 class="text-lg font-bold text-white">Biblioteca Comunitária</h1>
+    </div>
+  </header>
+
+  <div class="flex-1 flex items-center justify-center p-8">
+    <p-card class="w-full max-w-md">
+      <ng-template pTemplate="header">
+        <div class="text-center pt-6">
+          <h2 class="text-2xl font-bold text-gray-800">Login</h2>
+        </div>
+      </ng-template>
+
+      <form (ngSubmit)="onLogin()" class="space-y-5 p-4">
+        <div class="flex flex-col gap-2">
+          <label for="cpf" class="text-sm font-semibold">CPF</label>
+          <input
+            pInputText
+            id="cpf"
+            [(ngModel)]="username"
+            name="username"
+            (input)="onCpfInput($event)"
+            placeholder="000.000.000-00"
+            maxlength="14"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="password" class="text-sm font-semibold">Senha</label>
+          <p-password
+            [(ngModel)]="password"
+            name="password"
+            [feedback]="false"
+            [toggleMask]="true"
+            placeholder="••••••••"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          />
+        </div>
+
+        <div class="text-center">
+          <p-button
+            label="Cadastre-se"
+            [text]="true"
+            [link]="true"
+            size="small"
+            severity="secondary"
+            (onClick)="goToRegister()"
+          />
+        </div>
+
+        <p *ngIf="error" class="text-sm text-red-500 text-center">{{ error }}</p>
+
+        <p-button
+          label="Entrar"
+          type="submit"
+          severity="secondary"
+          styleClass="w-full bg-gray-400 hover:bg-gray-500 border-gray-400"
+        />
+      </form>
+    </p-card>
+  </div>
+
+</div>

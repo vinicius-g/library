@@ -17,7 +17,6 @@ import java.util.Set;
 public class BookService {
 
     private final BookRepository bookRepository;
-
     private final CategoryService categoryService;
 
     public BookService(
