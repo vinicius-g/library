@@ -26,5 +26,14 @@ services:
       - SPRING_DATASOURCE_USERNAME=dlibrary
       - SPRING_DATASOURCE_PASSWORD=dlibrary
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: library_frontend
+    ports:
+      - "4200:80" # Expõe na porta 4200 e joga para o Nginx na 80
+    depends_on:
+      - backend # O front só sobe depois da API estar pronta
+
 volumes:
   postgres_data:
