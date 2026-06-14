@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-gray-100">
+  <app-header />
+
+  <main class="p-8">
+
+    <div class="flex items-center gap-2 mb-6">
+      <p-button
+        icon="pi pi-arrow-left"
+        [text]="true"
+        label="Voltar"
+        severity="secondary"
+        (onClick)="onCancel()"
+        id="btn-back-category"
+      />
+      <span class="text-gray-300">/</span>
+      <h2 class="text-xl font-bold text-gray-800">Cadastrar Categoria</h2>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <p-card>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5" id="form-add-category">
+
+          <div class="flex flex-col gap-2">
+            <label for="category-name-input" class="text-sm font-semibold">Nome da Categoria</label>
+            <input 
+              pInputText 
+              formControlName="name" 
+              placeholder="Ex: Ficção Científica" 
+              class="w-full" 
+              id="category-name-input" 
+            />
+            <small *ngIf="isInvalid('name')" class="text-red-500" id="error-category-name">Nome da categoria é obrigatório.</small>
+          </div>
+
+          <div class="flex gap-3 justify-end">
+            <p-button
+              label="Cancelar"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="onCancel()"
+              id="btn-cancel-category"
+            />
+            <p-button
+              label="Salvar"
+              type="submit"
+              [raised]="true"
+              id="btn-save-category"
+            />
+          </div>
+
+        </form>
+      </p-card>
+    </div>
+
+  </main>
+</div>
