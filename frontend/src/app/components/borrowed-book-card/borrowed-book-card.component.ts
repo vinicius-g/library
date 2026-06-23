@@ -14,6 +14,7 @@ export class BorrowedBookCardComponent implements OnInit {
   coverUrl: string = '';
   imageError: boolean = false;
   imageLoading: boolean = true;
+  Math = Math;
 
   ngOnInit() {
     this.loadCoverImage();
@@ -48,5 +49,13 @@ export class BorrowedBookCardComponent implements OnInit {
     const returnDate = new Date(this.borrowing.mustReturnAt);
     const today = new Date();
     return returnDate < today;
+  }
+
+  getRemainingDays(): number {
+    const returnDate = new Date(this.borrowing.mustReturnAt);
+    const today = new Date();
+    const diffTime = returnDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   }
 }

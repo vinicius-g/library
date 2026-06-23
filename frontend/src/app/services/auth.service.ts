@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { tap, switchMap, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from '../models/auth.model';
+import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -11,16 +12,24 @@ export class AuthService {
   private readonly ROLE_KEY = 'user_role';
   private readonly USER_ID_KEY = 'user_id';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   login(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { username, password }).pipe(
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.token);
         localStorage.setItem(this.ROLE_KEY, response.role);
-        if (response.userId) {
-          localStorage.setItem(this.USER_ID_KEY, response.userId.toString());
-        }
+      }),
+      switchMap(response => {
+        return this.userService.getAll().pipe(
+          tap(users => {
+            const currentUser = users.find(user => user.username === username);
+            if (currentUser) {
+              localStorage.setItem(this.USER_ID_KEY, currentUser.id.toString());
+            }
+          }),
+          map(() => response)
+        );
       })
     );
   }
