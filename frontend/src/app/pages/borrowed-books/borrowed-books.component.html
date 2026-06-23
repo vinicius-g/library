@@ -9,7 +9,16 @@
       </span>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+    <div *ngIf="loading" class="flex justify-center items-center py-16">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+    </div>
+
+    <div *ngIf="!loading && borrowings.length === 0" class="text-center py-16">
+      <i class="pi pi-inbox text-6xl text-gray-400 mb-4"></i>
+      <p class="text-gray-600 text-lg">Você não possui livros emprestados no momento.</p>
+    </div>
+
+    <div *ngIf="!loading && borrowings.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
       <app-borrowed-book-card *ngFor="let borrowing of borrowings" [borrowing]="borrowing" />
     </div>
   </main>

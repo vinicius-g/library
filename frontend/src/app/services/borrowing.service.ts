@@ -19,7 +19,7 @@ export class BorrowingService {
     return this.http.post(this.url, payload, { headers: this.headers() });
   }
 
-  getBooksByUserId(userId: number): Observable<Borrowing[]> {
-    return this.http.get<Borrowing[]>(`${this.url}/user/${userId}`, { headers: this.headers() });
+  getActiveBorrowings(userId: number): Observable<{content: Borrowing[], page: any}> {
+    return this.http.get<{content: Borrowing[], page: any}>(`${this.url}/active/${userId}`, { headers: this.headers() });
   }
 }

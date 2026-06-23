@@ -29,9 +29,20 @@
       <p class="text-xs text-gray-600">
         <span class="font-semibold">Emprestado:</span> {{ formatDate(borrowing.borrowedAt) }}
       </p>
-      <p class="text-xs font-semibold mt-1" [ngClass]="isOverdue() ? 'text-red-600' : 'text-orange-600'">
-        <span class="font-semibold">Devolução:</span> {{ formatDate(borrowing.mustReturnAt) }}
-        <span *ngIf="isOverdue()" class="ml-1">(Atrasado)</span>
+      <p class="text-xs font-semibold mt-1" 
+         [ngClass]="{
+           'text-red-600': isOverdue(),
+           'text-orange-600': !isOverdue() && getRemainingDays() <= 3,
+           'text-green-600': !isOverdue() && getRemainingDays() > 3
+         }">
+        <span *ngIf="isOverdue()">
+          <i class="pi pi-exclamation-triangle mr-1"></i>
+          Atrasado {{ Math.abs(getRemainingDays()) }} dia(s)
+        </span>
+        <span *ngIf="!isOverdue()">
+          <i class="pi pi-clock mr-1"></i>
+          {{ getRemainingDays() }} dia(s) restante(s)
+        </span>
       </p>
     </div>
   </div>
